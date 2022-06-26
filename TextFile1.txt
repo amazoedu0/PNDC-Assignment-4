@@ -1,0 +1,156 @@
+﻿do
+{
+    count++;
+    Console.WriteLine($"\n Round : {count}");
+    foreach (Node n in graph.Nodes)
+    {
+        minST.AddMinEdge(n, minST.Nodes[n.MinIndexAndCost().Item1], n.MinIndexAndCost().Item2, true);
+
+        int indexOfEdge = 0;
+        foreach (Edge e in graph.Nodes[n.ID].Neighbor)
+        {
+            if (e.Dst.ID == n.MinIndexAndCost().Item1)
+                indexOfEdge = graph.Nodes[n.ID].Neighbor.IndexOf(e);
+        }
+        graph.RemoveUsedEdgeFrom(n, indexOfEdge);
+    }
+
+    //minST.Print();
+
+    minST.Nodes.Clear();
+    minST.Generate();
+
+
+    minST.AddEdge(minST.Nodes[0], minST.Nodes[1], 7);
+    minST.AddEdge(minST.Nodes[0], minST.Nodes[3], 7);
+    minST.AddEdge(minST.Nodes[0], minST.Nodes[2], 7);
+    minST.AddEdge(minST.Nodes[2], minST.Nodes[4], 7);
+    minST.AddEdge(minST.Nodes[2], minST.Nodes[5], 7);
+    minST.AddEdge(minST.Nodes[2], minST.Nodes[6], 7);
+    minST.AddEdge(minST.Nodes[6], minST.Nodes[7], 7);
+    minST.AddEdge(minST.Nodes[6], minST.Nodes[8], 7);
+    minST.AddEdge(minST.Nodes[7], minST.Nodes[10], 7);
+    minST.AddEdge(minST.Nodes[8], minST.Nodes[11], 7);
+    minST.AddEdge(minST.Nodes[10], minST.Nodes[9], 7);
+
+    minST.Print();
+
+    Console.WriteLine($"\n Counted : {minST.usedEdges(count) / 2} " +
+                      $": Graph Size: {graph.Size} " +
+                      $": {minST.Nodes[1].Neighbor.Count}");
+
+} while (minST.usedEdges(count) / 2 <= graph.Size - 1);
+
+
+
+
+
+
+minST.Nodes.Clear();
+minST.Generate();
+
+
+minST.AddEdge(minST.Nodes[0], minST.Nodes[1],7);
+minST.AddEdge(minST.Nodes[0], minST.Nodes[3],7);
+minST.AddEdge(minST.Nodes[0], minST.Nodes[2],7);
+minST.AddEdge(minST.Nodes[2], minST.Nodes[4],7);
+minST.AddEdge(minST.Nodes[2], minST.Nodes[5],7);
+minST.AddEdge(minST.Nodes[2], minST.Nodes[6],7);
+minST.AddEdge(minST.Nodes[6], minST.Nodes[7],7);
+minST.AddEdge(minST.Nodes[6], minST.Nodes[8],7);
+minST.AddEdge(minST.Nodes[7], minST.Nodes[10],7);
+minST.AddEdge(minST.Nodes[8], minST.Nodes[11],7);
+minST.AddEdge(minST.Nodes[10], minST.Nodes[9],7);
+
+
+if (src.ID < 11)
+        {
+            Edge toRemove = null;
+            Node nodeTORemove = null;
+
+            if (Nodes[src.ID].Neighbor.Count > 0)
+            {
+                foreach (Edge e in Nodes[src.ID].Neighbor)
+                {
+                    if (Nodes[src.ID + 1].Neighbor.Count > 0)
+                    {
+                        foreach (Edge e2 in Nodes[src.ID + 1].Neighbor)
+                        {
+                            if (e2.Dst.ID == e.Dst.ID)
+                            {
+                                if (e2.Cost < e.Cost)
+                                {
+                                    toRemove = e;
+                                    nodeTORemove = Nodes[src.ID];
+                                }
+                                else
+                                {
+                                    toRemove = e2;
+                                    nodeTORemove = Nodes[src.ID + 1];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            RemoveEdgeFrom(nodeTORemove, toRemove);
+        }
+
+
+
+
+
+
+
+
+        Edge toRemove = null;
+        Node nodeTORemove = null;
+        foreach (Node src in Nodes)
+        {
+            if (src.ID == 11)
+                break;
+            if (Nodes[src.ID].Neighbor.Count > 0)
+            {
+                foreach (Edge e in Nodes[src.ID].Neighbor)
+                {
+                    if (Nodes[src.ID].Neighbor.IndexOf(e) < 1)
+                        continue;
+                    if (Nodes[src.ID + 1].Neighbor.Count > 0)
+                    {
+                        foreach (Edge e2 in Nodes[src.ID + 1].Neighbor)
+                        {
+                            if (Nodes[src.ID + 1].Neighbor.IndexOf(e2) < 1)
+                                continue;
+                            if (e2.Dst.ID == e.Dst.ID)
+                            {
+                                if (e2.Cost < e.Cost)
+                                {
+                                    toRemove = e;
+                                    nodeTORemove = Nodes[src.ID];
+                                }
+                                else
+                                {
+                                    toRemove = e2;
+                                    nodeTORemove = Nodes[src.ID + 1];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            int idx = -1;
+
+            if (toRemove != null)
+            {
+                foreach (Edge e in toRemove.Dst.Neighbor)
+                {
+                    if (e.Dst.ID == nodeTORemove.ID)
+                        idx = toRemove.Dst.Neighbor.IndexOf(e);
+                }
+                if(idx != -1)
+                    RemoveEdgeFrom(toRemove.Dst, toRemove.Dst.Neighbor[idx]);
+            }
+
+            RemoveEdgeFrom(nodeTORemove, toRemove);
+        }
